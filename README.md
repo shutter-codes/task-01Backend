@@ -1,168 +1,36 @@
-# task-01Backend
+# API Documentation for Express Server
 
+This API documentation provides an overview of the structure and functionality of an Express server with MongoDB integration for user, about, and partner management.
 
-# API Documentation for About Section
+## Base URL
 
-This API documentation outlines the endpoints and operations available for managing the About section content.
+The base URL for all endpoints is assumed to be `http://your-api-base-url/`.
 
-## About Section
+## Server Configuration
 
-### 1. Create About Content
+- **Express Server:** The server is configured to run on the specified port (`process.env.PORT` or 5000 if not defined).
 
-- **Endpoint:** `POST /about`
-- **Description:** Creates a new About section content.
-- **Request Body:**
-  - `content` (string, required): The content of the About section.
-- **Response:**
-  - Status: 201 Created
-  - Body: JSON object representing the created About content.
+## Middleware
 
-### 2. Read About Content
+- **CORS:** Cross-Origin Resource Sharing middleware is enabled using the `cors` library to handle cross-origin HTTP requests.
+- **Body Parser:** Middleware for parsing JSON and URL-encoded data in the request body.
 
-- **Endpoint:** `GET /about`
-- **Description:** Retrieves the content of the About section.
-- **Response:**
-  - Status: 200 OK
-  - Body: JSON object containing the About section content.
-- **Error Responses:**
-  - Status: 404 Not Found
-    - Body: `{ "error": "Not found" }`
-  - Status: 500 Internal Server Error
-    - Body: `{ "error": "Internal Server Error" }`
+- The `isAdmin` middleware is used to restrict access to certain endpoints to users with the "admin" role.
 
-### 3. Update About Content
+## Database Connection
 
-- **Endpoint:** `PUT /about/:id`
-- **Description:** Updates the content of the About section by providing the `id` parameter.
-- **Request Parameters:**
-  - `id` (string, required): The unique identifier of the About content to be updated.
-- **Request Body:**
-  - `content` (string, required): The updated content of the About section.
-- **Response:**
-  - Status: 200 OK
-  - Body: JSON object representing the updated About content.
-- **Error Responses:**
-  - Status: 400 Bad Request
-    - Body: `{ "error": "Content is required for update" }`
-  - Status: 404 Not Found
-    - Body: `{ "error": "About not found" }`
-  - Status: 500 Internal Server Error
-    - Body: `{ "error": "Internal Server Error" }`
+- The server connects to a MongoDB database using the `mongoose` library. The database connection configuration is encapsulated in the `dbConnection` module.
 
-### 4. Delete About Content
+## User Management
 
-- **Endpoint:** `DELETE /about/:id`
-- **Description:** Deletes the About content identified by the provided `id`.
-- **Request Parameters:**
-  - `id` (string, required): The unique identifier of the About content to be deleted.
-- **Response:**
-  - Status: 204 No Content
-    - Body: No content in the response body.
-- **Error Responses:**
-  - Status: 404 Not Found
-    - Body: `{ "error": "About not found" }`
-  - Status: 500 Internal Server Error
-    - Body: `{ "error": "Internal Server Error" }`
+### 1. User Controller
 
-## Error Responses
+- **Controller Path:** `/api/users`
+- **Controller Module:** `userController`
 
-- **Status: 404 Not Found**
-  - Body: `{ "error": "Not found" }`
-- **Status: 500 Internal Server Error**
-  - Body: `{ "error": "Internal Server Error" }`
+#### Register a New User
 
-## Notes
-
-- Ensure that the request and response bodies are in JSON format.
-- Handle errors appropriately based on the provided error responses.
-- Use the appropriate HTTP methods for each operation (POST, GET, PUT, DELETE).
-
-- -----------------------------------------------------------------------------------
-
-# API Documentation for Partner Management
-
-This API documentation outlines the endpoints and operations available for managing partner information.
-
-## Partners
-
-### 1. Add a New Partner
-
-- **Endpoint:** `POST /partners`
-- **Description:** Creates a new partner entry.
-- **Request Body:**
-  - `partnerName` (string, required): Name of the partner.
-  - `desc` (string, required): Description of the partner.
-  - `experience` (string, required): Experience or background information about the partner.
-- **Response:**
-  - Status: 201 Created
-  - Body: JSON object representing the newly created partner.
-
-### 2. Get All Partners
-
-- **Endpoint:** `GET /partners`
-- **Description:** Retrieves information about all partners.
-- **Response:**
-  - Status: 200 OK
-  - Body: JSON object containing an array of partners.
-- **Error Responses:**
-  - Status: 404 Not Found
-    - Body: `{ "error": "Not found" }`
-  - Status: 500 Internal Server Error
-    - Body: `{ "error": "Internal Server Error" }`
-
-### 3. Update Partner Information
-
-- **Endpoint:** `PUT /partners/:id`
-- **Description:** Updates information for a specific partner identified by the provided `id`.
-- **Request Parameters:**
-  - `id` (string, required): The unique identifier of the partner to be updated.
-- **Request Body:**
-  - `partnerName` (string, required): Updated name of the partner.
-  - `desc` (string, required): Updated description of the partner.
-  - `experience` (string, required): Updated experience or background information about the partner.
-- **Response:**
-  - Status: 200 OK
-  - Body: JSON object representing the updated partner information.
-- **Error Responses:**
-  - Status: 400 Bad Request
-    - Body: `{ "error": "Field is required for update" }`
-  - Status: 404 Not Found
-    - Body: `{ "error": "Partner not found" }`
-  - Status: 500 Internal Server Error
-    - Body: `{ "error": "Internal Server Error" }`
-
-### 4. Delete Partner
-
-- **Endpoint:** `DELETE /partners/:id`
-- **Description:** Deletes information about a specific partner identified by the provided `id`.
-- **Request Parameters:**
-  - `id` (string, required): The unique identifier of the partner to be deleted.
-- **Response:**
-  - Status: 204 No Content
-    - Body: No content in the response body.
-- **Error Responses:**
-  - Status: 404 Not Found
-    - Body: `{ "error": "Partner not found" }`
-  - Status: 500 Internal Server Error
-    - Body: `{ "error": "Internal Server Error" }`
-
-## Error Responses
-
-- **Status: 404 Not Found**
-  - Body: `{ "error": "Not found" }`
-- **Status: 500 Internal Server Error**
-  - Body: `{ "error": "Internal Server Error" }`
- 
-  - ---------------------------------------------------------------------------
-  # API Documentation for User Authentication
-
-This API documentation outlines the endpoints and operations available for user registration, login, and logout.
-
-## User Authentication
-
-### 1. Register a New User
-
-- **Endpoint:** `POST /auth/register`
+- **Endpoint:** `POST /api/users/register`
 - **Description:** Registers a new user.
 - **Request Body:**
   - `username` (string, required): Username of the user.
@@ -172,55 +40,125 @@ This API documentation outlines the endpoints and operations available for user 
 - **Response:**
   - Status: 201 Created
   - Body: `{ "message": "User registered successfully." }`
-- **Error Responses:**
-  - Status: 400 Bad Request
-    - Body: `{ "message": "User with this username or email already exists." }`
-  - Status: 500 Internal Server Error
-    - Body: `{ "message": "Internal Server Error" }`
+- **Error Responses:** (same as described in the previous user authentication documentation)
 
-### 2. Login a User
+#### Login a User
 
-- **Endpoint:** `POST /auth/login`
+- **Endpoint:** `POST /api/users/login`
 - **Description:** Logs in a user and provides a JWT token.
 - **Request Body:**
   - `username` (string, required): Username of the user.
   - `password` (string, required): Password for the user.
-- **Response:**
-  - Status: 200 OK
-  - Body: JSON object containing JWT token and user information.
-- **Error Responses:**
-  - Status: 404 Not Found
-    - Body: `{ "message": "User not found." }`
-  - Status: 401 Unauthorized
-    - Body: `{ "message": "Invalid password." }`
-  - Status: 500 Internal Server Error
-    - Body: `{ "message": "Internal Server Error" }`
-- **Note:**
-  - The token should be included in the Authorization header for authenticated requests.
+- **Response:** (same as described in the previous user authentication documentation)
+- **Error Responses:** (same as described in the previous user authentication documentation)
 
-### 3. Logout a User
+#### Logout a User
 
-- **Endpoint:** `POST /auth/logout`
+- **Endpoint:** `POST /api/users/logout`
 - **Description:** Logs out a user and adds the token to the blacklist.
 - **Request Headers:**
   - `Authorization` (string, required): JWT token obtained during login.
-- **Response:**
-  - Status: 200 OK
-  - Body: `{ "message": "Logout successful" }`
-- **Error Responses:**
-  - Status: 401 Unauthorized
-    - Body: `{ "message": "Unauthorized" }`
-- **Note:**
-  - After logout, the token should no longer be used for authentication.
+- **Response:** (same as described in the previous user authentication documentation)
+- **Error Responses:** (same as described in the previous user authentication documentation)
+
+## About Management
+
+### 2. About Controller
+
+- **Controller Path:** `/api/about`
+- **Controller Module:** `aboutController`
+- **Middleware:** `isAdmin`
+
+#### Create About Content
+
+- **Endpoint:** `POST /api/about`
+- **Description:** Creates a new About section content.
+- **Request Body:**
+  - `content` (string, required): The content of the About section.
+- **Response:** (same as described in the About section documentation)
+
+#### Read About Content
+
+- **Endpoint:** `GET /api/about`
+- **Description:** Retrieves the content of the About section.
+- **Response:** (same as described in the About section documentation)
+- **Error Responses:** (same as described in the About section documentation)
+
+#### Update About Content
+
+- **Endpoint:** `PUT /api/about/:id`
+- **Description:** Updates the content of the About section by providing the `id` parameter.
+- **Request Parameters:**
+  - `id` (string, required): The unique identifier of the About content to be updated.
+- **Request Body:**
+  - `content` (string, required): The updated content of the About section.
+- **Response:** (same as described in the About section documentation)
+- **Error Responses:** (same as described in the About section documentation)
+
+#### Delete About Content
+
+- **Endpoint:** `DELETE /api/about/:id`
+- **Description:** Deletes the About content identified by the provided `id`.
+- **Request Parameters:**
+  - `id` (string, required): The unique identifier of the About content to be deleted.
+- **Response:** (same as described in the About section documentation)
+- **Error Responses:** (same as described in the About section documentation)
+
+## Partner Management
+
+### 3. Partner Controller
+
+- **Controller Path:** `/api/partner`
+- **Controller Module:** `partnerController`
+- **Middleware:** `isAdmin`
+
+#### Add a New Partner
+
+- **Endpoint:** `POST /api/partner`
+- **Description:** Creates a new partner entry.
+- **Request Body:**
+  - `partnerName` (string, required): Name of the partner.
+  - `desc` (string, required): Description of the partner.
+  - `experience` (string, required): Experience or background information about the partner.
+- **Response:** (same as described in the Partner section documentation)
+
+#### Get All Partners
+
+- **Endpoint:** `GET /api/partner`
+- **Description:** Retrieves information about all partners.
+- **Response:** (same as described in the Partner section documentation)
+- **Error Responses:** (same as described in the Partner section documentation)
+
+#### Update Partner Information
+
+- **Endpoint:** `PUT /api/partner/:id`
+- **Description:** Updates information for a specific partner identified by the provided `id`.
+- **Request Parameters:**
+  - `id` (string, required): The unique identifier of the partner to be updated.
+- **Request Body:**
+  - `partnerName` (string, required): Updated name of the partner.
+  - `desc` (string, required): Updated description of the partner.
+  - `experience` (string, required): Updated experience or background information about the partner.
+- **Response:** (same as described in the Partner section documentation)
+- **Error Responses:** (same as described in the Partner section documentation)
+
+#### Delete Partner
+
+- **Endpoint:** `DELETE /api/partner/:id`
+- **Description:** Deletes information about a specific partner identified by the provided `id`.
+- **Request Parameters:**
+  - `id` (string, required): The unique identifier of the partner to be deleted.
+- **Response:** (same as described in the Partner section documentation)
+- **Error Responses:** (same as described in the Partner section documentation)
 
 ## Error Responses
 
-- **Status: 400 Bad Request**
-  - Body: `{ "message": "User with this username or email already exists." }`
 - **Status: 401 Unauthorized**
-  - Body: `{ "message": "Invalid password." }` or `{ "message": "Unauthorized" }`
-- **Status: 404 Not Found**
-  - Body: `{ "message": "User not found." }`
-- **Status: 500 Internal Server Error**
-  - Body: `{ "message": "Internal Server Error" }`
+  - Body: `{ "error": "Unauthorized!" }`
 
+## Notes
+
+- Ensure that the request and response bodies are in JSON format.
+- Handle errors appropriately based on the provided error responses.
+- Use the appropriate HTTP methods for each operation (POST, GET, PUT, DELETE).
+- Replace `http://your-api-base-url/` with the actual base URL of your API.

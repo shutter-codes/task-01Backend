@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-const secretKey = "your-secret-key";
+
 
 const userSchema = require("../models/userSchema");
 
@@ -59,7 +59,7 @@ router.post('/login', async (req, res) => {
       }
   
       // Generate a JWT token
-      const token = jwt.sign({ userId: user._id, username: user.username }, secretKey, { expiresIn: '1h' });
+      const token = jwt.sign({ userId: user._id, username: user.username }, process.env.SECRET_KEY, { expiresIn: '1h' });
   
       res.status(200).json({ token, userId: user._id, username: user.username ,role:user.role});
       if(user.role=="admin"){

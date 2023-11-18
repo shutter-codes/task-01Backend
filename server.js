@@ -24,11 +24,13 @@ app.use(bodyParser.urlencoded({ extended: true }));
 //   });
 // };
 
-// module.exports = isAdmin;
+// app.use("/api/users", isAdmin, userController);
+
 app.use("/api/users", userController);
 app.use("/api/about", aboutController);
 app.use("/api/partner", partnerController);
-  
+
+
 // listen on the port
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

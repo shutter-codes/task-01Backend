@@ -1,12 +1,12 @@
 const express = require("express");
 const router = express.Router();
 
-const About = require("../models/aboutSchema");
+const aboutSchema = require("../models/aboutSchema");
 
 // CRUD operations for the About section
 
 // Create
-router.post("/", async (req, res) => {
+router.post("/about", async (req, res) => {
     const { content } = req.body;
     try {
       const about = new About({ content });
@@ -18,7 +18,7 @@ router.post("/", async (req, res) => {
   });
 
   // Read
-router.get("/", async (req, res) => {
+router.get("/about", async (req, res) => {
     try {
       const about = await About.find({});
   
@@ -35,7 +35,7 @@ router.get("/", async (req, res) => {
   });
 
   // Update
-router.put("/:id", async (req, res) => {
+router.put("/about/:id", async (req, res) => {
     const { id } = req.params;
     const { content } = req.body;
   
@@ -60,7 +60,7 @@ router.put("/:id", async (req, res) => {
 
   
 // Delete
-router.delete("/:id", async (req, res) => {
+router.delete("/about/:id", async (req, res) => {
     const { id } = req.params;
   
     try {

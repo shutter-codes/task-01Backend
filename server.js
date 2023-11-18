@@ -15,19 +15,19 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-const isAdmin = async (req, res, next) => {
-  if (req.user.role == "admin") {
-    return next();
-  }
-  return res.status(401).json({
-    error: "Unauthorized!"
-  });
-};
+// const isAdmin = async (req, res, next) => {
+//   if (req.user.role == "admin") {
+//     return next();
+//   }
+//   return res.status(401).json({
+//     error: "Unauthorized!"
+//   });
+// };
 
 // module.exports = isAdmin;
 app.use("/api/users", userController);
-app.use("/api/about",isAdmin, aboutController);
-app.use("/api/partner",isAdmin, partnerController);
+app.use("/api/about", aboutController);
+app.use("/api/partner", partnerController);
   
 // listen on the port
 app.listen(PORT, () => {
